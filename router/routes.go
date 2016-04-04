@@ -143,6 +143,7 @@ func (rm *RouteManager) route(route *Route) {
 	defer route.Close()
 	rm.Route(route, logstream)
 	route.adapter.Stream(logstream)
+	os.Exit(1)
 }
 
 func (rm *RouteManager) Route(route *Route, logstream chan *Message) {

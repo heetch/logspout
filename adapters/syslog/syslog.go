@@ -91,7 +91,7 @@ func (a *SyslogAdapter) Stream(logstream chan *router.Message) {
 		m := &SyslogMessage{message}
 		buf, err := m.Render(a.tmpl)
 		if err != nil {
-			log.Println("syslog:", err)
+			log.Println("syslog fatal error: ", err)
 			return
 		}
 		_, err = a.conn.Write(buf)
@@ -103,9 +103,11 @@ func (a *SyslogAdapter) Stream(logstream chan *router.Message) {
 			default:
 				err = a.retry(buf, err)
 				if err != nil {
-					log.Println("syslog:", err)
+					log.Println("syslog fatal error: ", err)
 					return
 				}
+
+				log.Printf("syslog: error recovered")
 			}
 		}
 	}
